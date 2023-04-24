@@ -1,11 +1,13 @@
 import os
 import json
+import dataclasses
+
 from financial_apis import get_company_info,get_company_financial,get_company_financial_ratios,get_key_metrics,get_company_enterprise_value,get_financial_growth
 from config import FINANCE_API_KEY
 from config import RAW_FILE_DATA_PATH
-# import dataclasses
 
-# @dataclasses.dataclass
+
+@dataclasses.dataclass
 class Entity:
     def __init__(self,symbol) -> None:
         self.symbol = symbol
@@ -24,11 +26,11 @@ class Entity:
     
     @property
     def balance_sheet_statement(self):
-        return get_company_financial(self.symbol,"balance_sheet")
+        return get_company_financial(self.symbol,"balance_sheet_statement")
     
     @property
     def cash_flow_statement(self):
-        return get_company_financial(self.symbol,"cash_flow")
+        return get_company_financial(self.symbol,"cash_flow_statement")
     
     @property
     def company_financial_ratios(self):

@@ -16,6 +16,7 @@ aiohttp = "^3.8.4"
 orjson = "^3.8.10"
 pandas = "^2.0.0"
 dask = "^2023.4.0"
+ratelimit = "^2.2.1"
 
 
 [tool.poetry.group.dev.dependencies]

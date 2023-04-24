@@ -1,8 +1,8 @@
-from config import FINANCE_API_KEY
-
 import requests
 import orjson
-# APIs
+
+from config import FINANCE_API_KEY
+from utils import throttled_api_request
 
 def get_eligible_entities():
     uri = "https://financialmodelingprep.com/api/v3/stock/list"
@@ -14,8 +14,7 @@ def get_company_info(symbol):
     Refer to the API page for details: https://site.financialmodelingprep.com/developer/docs/company-outlook-api
     '''
     uri = "https://financialmodelingprep.com/api/v4/company-outlook"
-    raw_response = requests.get(uri,params={'symbol':symbol,'apikey':FINANCE_API_KEY})
-    response = orjson.loads(raw_response.text)
+    response = throttled_api_request(uri,params={'symbol':symbol,'apikey':FINANCE_API_KEY})
     return response.get("profile")
 
 def get_company_financial(symbol,type):
@@ -27,14 +26,13 @@ def get_company_financial(symbol,type):
         uri = "https://financialmodelingprep.com/api/v3/income-statement/{}".format(symbol)
     elif type=="reported_financial_statement":
         uri = "https://financialmodelingprep.com/api/v3/financial-statement-full-as-reported/{}".format(symbol)
-    elif type=="balance_sheet":
-        uri = "https://financialmodelingprep.com/api/v3/balance-sheet-statement/{}"
-    elif type=="cash_flow":
-        uri = "https://financialmodelingprep.com/api/v3/cash-flow-statement/{}"
+    elif type=="balance_sheet_statement":
+        uri = "https://financialmodelingprep.com/api/v3/balance-sheet-statement/{}".format(symbol)
+    elif type=="cash_flow_statement":
+        uri = "https://financialmodelingprep.com/api/v3/cash-flow-statement/{}".format(symbol)
 
     limit = 120
-    raw_response = requests.get(uri,params={'limit':limit,'period':'annual','apikey':FINANCE_API_KEY})
-    return orjson.loads(raw_response.text)
+    return throttled_api_request(uri,params={'limit':limit,'period':'annual','apikey':FINANCE_API_KEY})
 
 def get_company_financial_ratios(symbol):
     '''
@@ -42,8 +40,7 @@ def get_company_financial_ratios(symbol):
     '''
     limit = 120
     uri = "https://financialmodelingprep.com/api/v3/ratios/{}".format(symbol)
-    raw_response = requests.get(uri,params={'limit':limit,'period':'annual','apikey':FINANCE_API_KEY})
-    return orjson.loads(raw_response.text)
+    return throttled_api_request(uri,params={'limit':limit,'period':'annual','apikey':FINANCE_API_KEY})
 
 def get_key_metrics(symbol):
     '''
@@ -52,9 +49,7 @@ def get_key_metrics(symbol):
     '''
     limit = 120
     uri = "https://financialmodelingprep.com/api/v3/key-metrics/{}".format(symbol)
-    raw_response = requests.get(uri,params={'period':'annual','limit':limit,'apikey':FINANCE_API_KEY})
-    return orjson.loads(raw_response.text)
-
+    return throttled_api_request(uri,params={'period':'annual','limit':limit,'apikey':FINANCE_API_KEY})
 
 def get_company_enterprise_value(symbol):
     '''
@@ -62,16 +57,12 @@ def get_company_enterprise_value(symbol):
     '''
     limit = 120
     uri = "https://financialmodelingprep.com/api/v3/enterprise-values/{}".format(symbol)
-    raw_response = requests.get(uri,params={'period':'annual','limit':limit,'apikey':FINANCE_API_KEY})
-    return orjson.loads(raw_response.text)
+    return throttled_api_request(uri,params={'period':'annual','limit':limit,'apikey':FINANCE_API_KEY})
 
 def get_financial_growth(symbol):
     limit = 120
     uri = "https://financialmodelingprep.com/api/v3/financial-growth/{}".format(symbol)
-    raw_response = requests.get(uri,params={'period':'annual','limit':limit,'apikey':FINANCE_API_KEY})
-    return orjson.loads(raw_response.text)
-
-
+    return throttled_api_request(uri,params={'period':'annual','limit':limit,'apikey':FINANCE_API_KEY})
 
 ############TODO
 
