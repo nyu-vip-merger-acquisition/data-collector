@@ -1,11 +1,14 @@
 from financial_apis import get_eligible_entities
 from models import Entity
+from tqdm import tqdm
 
 def collect_data_from_financialprep():
     entities = get_eligible_entities()
-    for symbol in entities:
+    for i in tqdm(range(len(entities))):
+        symbol = entities[i]
         entity = Entity(symbol)
-        print(entity)
+        print("*"*89)
+        # print(entity)
         entity.write_to_file()
 
 
