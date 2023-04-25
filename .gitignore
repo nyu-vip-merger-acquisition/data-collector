@@ -1,3 +1,4 @@
 data_collector/__pycache__/*
 data/*
 poetry.lock
+output.out
